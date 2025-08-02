@@ -32,7 +32,7 @@ const getMovieById = (id) =>
 <template>
   <MainLayout>
     <div class="p-4 md:p-8">
-      <h2 class="text-3xl font-semibold mb-4 text-white">🔔 การแจ้งเตือน</h2>
+      <h2 class="text-3xl font-semibold mb-4 text-white">🔔 Notification</h2>
       <ul class="space-y-4">
         <li v-for="note in notifications" :key="note.id">
           <div
