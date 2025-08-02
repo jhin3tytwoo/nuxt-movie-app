@@ -1,5 +1,5 @@
 <script setup name="NotificationPage">
-import { ref } from "vue";
+import { ref, computed } from "vue"; // Import computed
 import MainLayout from "~/components/MainLayout.vue";
 import { useMovies } from "~/composables/useMovies";
 
@@ -23,52 +23,63 @@ const openedNotificationId = ref(null);
 const toggleMovie = (id) => {
   openedNotificationId.value = openedNotificationId.value === id ? null : id;
 };
+
+// Use computed property to find movie to avoid redundant calls
+const getMovieById = (id) =>
+  computed(() => movies.value.find((m) => m.id === id));
 </script>
 
 <template>
   <MainLayout>
-    <div>
-      <h2 class="text-3xl font-semibold mb-4">🔔 การแจ้งเตือน</h2>
+    <div class="p-4 md:p-8">
+      <h2 class="text-3xl font-semibold mb-4 text-white">🔔 การแจ้งเตือน</h2>
       <ul class="space-y-4">
         <li v-for="note in notifications" :key="note.id">
           <div
             @click="toggleMovie(note.id)"
-            class="bg-white p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100 transition"
+            class="bg-gray-800 p-4 rounded-lg shadow cursor-pointer hover:bg-gray-700 transition flex items-center justify-between"
           >
-            {{ note.message }}
+            <span class="text-white">{{ note.message }}</span>
+            <span class="material-icons text-white">
+              {{
+                openedNotificationId === note.id ? "expand_less" : "expand_more"
+              }}
+            </span>
           </div>
 
           <div
             v-if="openedNotificationId === note.id"
-            class="mt-2 p-4 border-l-4 border-purple-600 bg-purple-50 rounded-lg"
+            class="mt-2 p-4 border-l-4 border-yellow-500 bg-gray-900 rounded-lg flex items-start space-x-4"
           >
-            <template v-if="movies && movies.length">
-              <template v-if="movies.find((m) => m.id === note.movieId)">
-                <div class="text-black">
-                  <h3 class="text-xl font-bold mb-1">
-                    {{ movies.find((m) => m.id === note.movieId).title }}
-                  </h3>
-                  <p class="mb-1">
-                    {{ movies.find((m) => m.id === note.movieId).description }}
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    ⏱ ความยาว:
-                    {{ movies.find((m) => m.id === note.movieId).length }} นาที
-                    | ⭐ คะแนน:
-                    {{ movies.find((m) => m.id === note.movieId).rating }} | 🔊
-                    ภาษา:
-                    {{ movies.find((m) => m.id === note.movieId).language }}
-                  </p>
-                  <button
-                    class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded mt-3"
-                  >
-                    ▶️ Watch Now
-                  </button>
-                </div>
-              </template>
-              <template v-else>
-                <p class="text-red-500">ไม่พบข้อมูลหนัง</p>
-              </template>
+            <template v-if="getMovieById(note.movieId).value">
+              <img
+                :src="getMovieById(note.movieId).value.image"
+                alt="Movie Poster"
+                class="w-24 h-36 object-cover rounded-md flex-shrink-0"
+              />
+              <div class="text-white flex-grow">
+                <h3 class="text-xl font-bold mb-1">
+                  {{ getMovieById(note.movieId).value.title }}
+                </h3>
+                <p class="mb-1 text-gray-300">
+                  {{ getMovieById(note.movieId).value.description }}
+                </p>
+                <p class="text-sm text-gray-400">
+                  ⏱ ความยาว:
+                  {{ getMovieById(note.movieId).value.length }} | ⭐ คะแนน:
+                  {{ getMovieById(note.movieId).value.rating }} | 🔊 ภาษา:
+                  {{ getMovieById(note.movieId).value.language }}
+                </p>
+                <button
+                  class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded mt-3 text-sm flex items-center space-x-1"
+                >
+                  <span class="material-icons text-lg">play_arrow</span>
+                  <span>Watch Now</span>
+                </button>
+              </div>
+            </template>
+            <template v-else>
+              <p class="text-red-500">ไม่พบข้อมูลหนัง</p>
             </template>
           </div>
         </li>

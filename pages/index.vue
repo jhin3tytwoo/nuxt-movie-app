@@ -1,5 +1,155 @@
+<template>
+  <MainLayout>
+    <div class="bg-black min-h-screen text-white font-sans">
+      <div class="flex items-center gap-3 px-4 md:px-8 py-4">
+        <div
+          class="flex items-center flex-grow bg-black bg-opacity-30 rounded-full px-4 py-2"
+        >
+          <span class="material-icons text-white mr-2">search</span>
+          <input
+            v-model="searchTerm"
+            type="text"
+            placeholder="Search movie"
+            class="bg-transparent text-white placeholder-gray-300 focus:outline-none w-full"
+          />
+        </div>
+        <button
+          @click="showFilters = !showFilters"
+          class="text-white flex items-center gap-1"
+        >
+          <span class="material-icons">filter_list</span>
+          <span class="hidden md:inline">Filter</span>
+        </button>
+      </div>
+
+      <transition name="fade">
+        <div v-if="showFilters" class="px-4 md:px-8 py-4">
+          <div class="mb-4">
+            <label class="block mb-2 font-semibold">Category</label>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="cat in categories"
+                :key="cat"
+                @click="selectedCategory = cat"
+                :class="[
+                  'px-3 py-1 rounded border cursor-pointer',
+                  selectedCategory === cat
+                    ? 'bg-yellow-500 text-black border-yellow-500'
+                    : 'bg-gray-800 text-white border-gray-500 hover:bg-gray-600',
+                ]"
+              >
+                {{ cat }}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-2 font-semibold">Length</label>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="len in lengthOptions"
+                :key="len"
+                @click="selectedLength = len"
+                :class="[
+                  'px-3 py-1 rounded border cursor-pointer',
+                  selectedLength === len
+                    ? 'bg-yellow-500 text-black border-yellow-500'
+                    : 'bg-gray-800 text-white border-gray-500 hover:bg-gray-600',
+                ]"
+              >
+                {{ len }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+
+      <div class="flex overflow-x-auto gap-4 px-4 md:px-8 py-4">
+        <div
+          v-for="movie in filteredMovies"
+          :key="movie.id"
+          class="min-w-[60%] md:min-w-[18%] rounded-xl overflow-hidden shadow-lg"
+        >
+          <img
+            :src="movie.image"
+            :alt="movie.title"
+            class="w-full h-80 object-cover"
+          />
+        </div>
+      </div>
+      <div class="px-4 md:px-8">
+        <h2 class="text-xl font-bold mb-2">Recently watch</h2>
+        <div class="flex overflow-x-auto gap-3">
+          <div
+            v-for="movie in filteredMovies.slice(0, 5)"
+            :key="'recent-' + movie.id"
+            class="bg-gray-800 rounded-xl p-2 flex flex-col flex-shrink-0 min-w-[60%] md:min-w-[18%] overflow-hidden shadow-lg"
+            style="width: 180px"
+          >
+            <div class="overflow-hidden rounded mb-2 h-40 w-full flex-shrink-0">
+              <img
+                :src="movie.image"
+                class="w-full h-full object-cover"
+                alt="movie.title"
+              />
+            </div>
+            <p class="text-sm font-semibold">{{ movie.title }}</p>
+            <p class="text-xs opacity-60">EP.2 “Last Dance”</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 md:px-8 mt-6">
+        <h2 class="text-xl font-bold mb-2">New coming</h2>
+        <div class="flex overflow-x-auto gap-3">
+          <div
+            v-for="movie in filteredMovies.slice(0, 5)"
+            :key="'new-' + movie.id"
+            class="bg-gray-800 min-w-[45%] md:min-w-0 rounded-xl overflow-hidden flex flex-col shadow-lg"
+            style="width: 180px"
+          >
+            <div class="overflow-hidden rounded-t h-40 w-full flex-shrink-0">
+              <img
+                :src="movie.image"
+                class="w-full h-full object-cover"
+                alt="movie.title"
+              />
+            </div>
+            <div class="p-2 flex flex-col flex-grow">
+              <p class="text-sm font-bold">{{ movie.title }}</p>
+              <p class="text-yellow-400 text-sm">⭐⭐⭐⭐☆</p>
+              <p class="text-xs text-gray-400">🕒 {{ movie.length }}</p>
+              <p class="text-xs text-gray-400">🌐 {{ movie.language }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 md:px-8 mt-6 mb-10">
+        <h2 class="text-xl font-bold mb-2">Action</h2>
+        <div class="flex overflow-x-auto gap-3">
+          <div
+            v-for="movie in filteredMovies
+              .filter((m) => m.category === 'Action')
+              .slice(0, 5)"
+            :key="'action-' + movie.id"
+            class="bg-gray-800 min-w-[45%] md:min-w-0 rounded-xl overflow-hidden shadow-lg"
+            style="width: 180px; height: 240px"
+          >
+            <img
+              :src="movie.image"
+              class="w-full h-full object-cover"
+              alt="movie.title"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </MainLayout>
+</template>
+
 <script setup name="HomePage">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useMovies } from "~/composables/useMovies";
 import MainLayout from "~/components/MainLayout.vue";
 
@@ -8,6 +158,18 @@ const searchTerm = ref("");
 const showFilters = ref(false);
 const selectedCategory = ref("All");
 const selectedLength = ref("All");
+
+const isDesktop = ref(false);
+const checkScreenWidth = () => {
+  isDesktop.value = window.innerWidth >= 768; // Tailwind's 'md' breakpoint
+};
+onMounted(() => {
+  checkScreenWidth();
+  window.addEventListener("resize", checkScreenWidth);
+});
+onUnmounted(() => {
+  window.removeEventListener("resize", checkScreenWidth);
+});
 
 const categories = computed(() => {
   const cats = movies.value.map((m) => m.category);
@@ -47,115 +209,6 @@ const filteredMovies = computed(() =>
   })
 );
 </script>
-
-<template>
-  <MainLayout>
-    <div>
-      <div class="flex flex-col md:flex-row md:items-center gap-4 mb-2">
-        <input
-          v-model="searchTerm"
-          type="text"
-          placeholder="ค้นหาหนังตามชื่อ..."
-          class="flex-grow border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
-        />
-
-        <button
-          @click="showFilters = !showFilters"
-          class="flex items-center gap-2 border border-gray-300 rounded px-4 py-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-600"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zM3 16a1 1 0 011-1h10a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"
-            />
-          </svg>
-          Filter
-        </button>
-      </div>
-
-      <transition name="fade">
-        <div
-          v-if="showFilters"
-          class="mb-6 border border-gray-300 rounded p-4 bg-white shadow"
-        >
-          <!-- Category -->
-          <div class="mb-4">
-            <label class="block mb-2 font-semibold">Category</label>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="cat in categories"
-                :key="cat"
-                @click="selectedCategory = cat"
-                :class="[
-                  'px-3 py-1 rounded border cursor-pointer',
-                  selectedCategory === cat
-                    ? 'bg-purple-600 text-white border-purple-600'
-                    : 'bg-white text-black border-gray-300 hover:bg-gray-100',
-                ]"
-              >
-                {{ cat }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Length -->
-          <div>
-            <label class="block mb-2 font-semibold">Length</label>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="len in lengthOptions"
-                :key="len"
-                @click="selectedLength = len"
-                :class="[
-                  'px-3 py-1 rounded border cursor-pointer',
-                  selectedLength === len
-                    ? 'bg-purple-600 text-white border-purple-600'
-                    : 'bg-white text-black border-gray-300 hover:bg-gray-100',
-                ]"
-              >
-                {{ len }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </transition>
-
-      <div class="grid gap-4 md:grid-cols-3">
-        <div
-          v-for="movie in filteredMovies"
-          :key="movie.id"
-          class="bg-white text-black p-4 rounded-xl shadow-xl hover:scale-105 transition"
-        >
-          <img
-            :src="movie.image"
-            :alt="movie.title"
-            class="w-full h-48 object-cover rounded mb-3"
-          />
-          <h3 class="font-bold text-xl">{{ movie.title }}</h3>
-          <div class="flex items-center mb-2">
-            <template v-for="n in 5" :key="n">
-              <span class="text-yellow-500 text-lg">
-                {{ n <= movie.rating ? "★" : "☆" }}
-              </span>
-            </template>
-          </div>
-          <p class="text-sm text-gray-700">⏱️ {{ movie.length }}</p>
-          <p class="text-sm text-gray-700">
-            🔊<span class="font-semibold">{{ movie.language }}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  </MainLayout>
-</template>
 
 <style scoped>
 .fade-enter-active,

@@ -1,61 +1,45 @@
 <script setup name="LiveNow">
-import { computed } from "vue";
-import { useMovies } from "~/composables/useMovies";
+import { ref } from "vue"; // Use ref instead of computed for static data
 import MainLayout from "~/components/MainLayout.vue";
 
-const { movies } = useMovies();
-
-const liveMovies = computed(() => movies.value.filter((m) => m.live));
+// Define the live TV channels data
+const liveChannels = ref([
+  {
+    id: 1,
+    name: "BBC news",
+    logo: "https://i.pinimg.com/736x/c2/b4/83/c2b48362f5e61768ceacdb503c73cdb9.jpg",
+  },
+  {
+    id: 2,
+    name: "3 HD",
+    logo: "https://i.pinimg.com/736x/7f/83/43/7f83431ed729207515e387411cd8bb3b.jpg",
+  },
+  {
+    id: 3,
+    name: "7 HD",
+    logo: "https://i.pinimg.com/736x/78/b4/2a/78b42afd46b06a2566385cb95c7e4949.jpg",
+  },
+]);
 </script>
 
 <template>
   <MainLayout>
-    <div>
-      <h2 class="text-3xl font-semibold mb-4">
-        <span class="material-icons">live_tv</span> Live now
+    <div class="p-4 md:p-8">
+      <h2 class="text-3xl font-semibold mb-4 flex items-center text-white">
+        <span class="material-icons mr-2">live_tv</span> Live now
       </h2>
-      <div class="grid gap-4 md:grid-cols-3">
+      <div class="flex flex-wrap gap-4">
         <div
-          v-for="movie in liveMovies"
-          :key="movie.id"
-          class="bg-white text-black p-4 rounded-xl shadow-xl hover:scale-105 transition"
+          v-for="channel in liveChannels"
+          :key="channel.id"
+          class="flex flex-col items-center bg-gray-800 p-4 rounded-xl shadow-xl hover:scale-105 transition cursor-pointer"
         >
-          <!-- รูปภาพ -->
           <img
-            :src="movie.image"
-            :alt="movie.title"
-            class="rounded-lg w-full h-48 object-cover mb-2"
+            :src="channel.logo"
+            :alt="channel.name"
+            class="w-24 h-24 object-contain mb-2 rounded-lg"
           />
-
-          <!-- ชื่อหนัง -->
-          <h3 class="font-bold text-xl">{{ movie.title }}</h3>
-
-          <!-- คำอธิบาย -->
-          <p class="text-sm text-gray-600 mb-1">{{ movie.description }}</p>
-
-          <!-- ความยาวหนัง -->
-          <p class="text-sm text-gray-500">⏱️ {{ movie.length }}</p>
-
-          <!-- ภาษา -->
-          <p class="text-sm text-gray-500">
-            <span class="inline-block mr-1">
-              <span v-if="movie.language === 'TH'">🔊</span>
-              <span v-else-if="movie.language === 'EN'">🔈</span>
-            </span>
-            ภาษา {{ movie.language }}
-          </p>
-
-          <!-- คะแนน (ดาว) -->
-          <div class="text-yellow-500 mt-1">
-            <span v-for="n in 5" :key="n" class="text-lg">
-              {{ n <= movie.rating ? "★" : "☆" }}
-            </span>
-          </div>
-
-          <!-- แสดงว่า Live -->
-          <span class="text-red-500 font-semibold block mt-2"
-            >🔴 Live Now!</span
-          >
+          <p class="text-white font-semibold">{{ channel.name }}</p>
         </div>
       </div>
     </div>
