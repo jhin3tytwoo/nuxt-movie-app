@@ -2,7 +2,8 @@
   <div
     class="min-h-screen flex flex-col bg-black text-white md:grid md:grid-cols-[240px_1fr]"
   >
-    <aside class="hidden md:flex flex-col bg-black p-4 relative">
+    <!-- เมนูด้านซ้าย (Desktop) -->
+    <aside class="hidden md:flex flex-col bg-black p-4 relative bg-black">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-extrabold">
           <span class="text-white">TEST</span
@@ -12,14 +13,14 @@
           <span class="material-icons">notifications</span>
         </NuxtLink>
       </div>
-      <nav class="flex flex-col gap-4 text-white">
+      <nav class="flex flex-col gap-4 bg-black">
         <NuxtLink
           to="/"
           class="p-2 rounded flex items-center gap-2"
           :class="{
             'bg-gray-700 text-yellow-400 border-l-4 border-yellow-400 pl-2':
               $route.path === '/',
-            'hover:bg-gray-800': $route.path !== '/',
+            'text-white hover:bg-gray-800': $route.path !== '/',
           }"
         >
           <span class="material-icons">home</span> Home
@@ -30,7 +31,7 @@
           :class="{
             'bg-gray-700 text-yellow-400 border-l-4 border-yellow-400 pl-2':
               $route.path === '/LiveNow',
-            'hover:bg-gray-800': $route.path !== '/',
+            'text-white hover:bg-gray-800': $route.path !== '/LiveNow',
           }"
         >
           <span class="material-icons">live_tv</span> Live now
@@ -41,7 +42,7 @@
           :class="{
             'bg-gray-700 text-yellow-400 border-l-4 border-yellow-400 pl-2':
               $route.path === '/FavoritePage',
-            'hover:bg-gray-800': $route.path !== '/',
+            'text-white hover:bg-gray-800': $route.path !== '/FavoritePage',
           }"
         >
           <span class="material-icons">favorite</span> Favorite
@@ -55,7 +56,7 @@
           :class="{
             'bg-gray-700 text-yellow-400 border-l-4 border-yellow-400 pl-2':
               $route.path === '/LoginPage',
-            'hover:bg-gray-800': $route.path !== '/',
+            'text-white hover:bg-gray-800': $route.path !== '/LoginPage',
           }"
         >
           <span class="material-icons">account_circle</span> Login
@@ -64,18 +65,15 @@
       <NuxtLink
         to="https://github.com/jhin3tytwoo/nuxt-movie-app"
         target="_blank"
-        class="p-2 rounded flex items-center gap-2 hover:bg-gray-800"
+        class="p-2 rounded flex items-center gap-2 text-white hover:bg-gray-800"
       >
         <span class="material-icons">code</span> GitHub
       </NuxtLink>
-
-      <div
-        class="absolute inset-y-0 right-0 w-1.5 bg-gradient-to-b from-orange-700 to-yellow-500 shadow-lg shadow-yellow-500/50"
-      ></div>
     </aside>
 
+    <!-- แถบบนมือถือ -->
     <div
-      class="md:hidden flex items-center justify-between px-4 py-3 bg-gradient-to-r from-orange-800 to-yellow-500 shadow-lg shadow-yellow-500/50 rounded-b-3xl"
+      class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl"
     >
       <h1 class="text-xl font-bold">
         <span class="text-white">TEST</span
@@ -86,20 +84,22 @@
       </NuxtLink>
     </div>
 
+    <!-- เนื้อหาหลัก -->
     <div class="flex-1 flex flex-col">
-      <main class="flex-1">
+      <main class="flex-1 pb-[70px]">
         <slot />
       </main>
 
+      <!-- เมนูล่างมือถือ -->
       <nav
-        class="md:hidden fixed bottom-0 left-0 right-0 flex justify-around bg-gradient-to-r from-orange-800 to-yellow-500 p-2 shadow-lg shadow-yellow-500/50 rounded-t-3xl"
+        class="md:hidden fixed bottom-0 left-0 right-0 flex justify-around bg-black p-2 rounded-t-3xl"
       >
         <NuxtLink
           to="/"
           class="flex flex-col items-center"
           :class="{
             'text-yellow-400': $route.path === '/',
-            'text-white': $route.path !== '/',
+            'text-gray-400': $route.path !== '/',
           }"
         >
           <span class="material-icons text-lg">home</span>
@@ -110,7 +110,7 @@
           class="flex flex-col items-center"
           :class="{
             'text-yellow-400': $route.path === '/LiveNow',
-            'text-white': $route.path !== '/LiveNow',
+            'text-gray-400': $route.path !== '/LiveNow',
           }"
         >
           <span class="material-icons text-lg">live_tv</span>
@@ -121,7 +121,7 @@
           class="flex flex-col items-center"
           :class="{
             'text-yellow-400': $route.path === '/FavoritePage',
-            'text-white': $route.path !== '/FavoritePage',
+            'text-gray-400': $route.path !== '/FavoritePage',
           }"
         >
           <span class="material-icons text-lg">favorite</span>
@@ -132,7 +132,7 @@
           class="flex flex-col items-center"
           :class="{
             'text-yellow-400': $route.path === '/LoginPage',
-            'text-white': $route.path !== '/LoginPage',
+            'text-gray-400': $route.path !== '/LoginPage',
           }"
         >
           <span class="material-icons text-lg">account_circle</span>
@@ -141,7 +141,7 @@
         <NuxtLink
           to="https://github.com/jhin3tytwoo/nuxt-movie-app"
           target="_blank"
-          class="flex flex-col items-center text-white"
+          class="flex flex-col items-center text-gray-400"
         >
           <span class="material-icons text-lg">code</span>
           <span class="text-xs">GitHub</span>
