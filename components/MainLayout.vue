@@ -92,7 +92,7 @@
 
       <!-- เมนูล่างมือถือ -->
       <nav
-        class="md:hidden fixed bottom-0 left-0 right-0 flex justify-around bg-black p-2 rounded-t-3xl"
+        class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around bg-black p-2 rounded-t-3xl"
       >
         <NuxtLink
           to="/"
