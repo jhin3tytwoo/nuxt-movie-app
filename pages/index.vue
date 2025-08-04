@@ -203,7 +203,6 @@
                   filteredMovies.length === 0
                 )
               "
-              class="px-4 md:px-8 mt-6 mb-10"
             >
               <h2 class="text-xl font-bold mb-2">Action</h2>
               <div class="flex overflow-x-auto gap-3 hide-scrollbar">
