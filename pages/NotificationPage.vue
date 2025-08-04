@@ -32,7 +32,7 @@ const getMovieById = (id) =>
 
 <template>
   <MainLayout>
-    <GradientBorder>
+    <GradientBorder class="py-4">
       <div class="md:p-8 min-h-screen m-4 p-[2px] relative">
         <h2 class="text-3xl font-semibold mb-4 text-white">🔔 Notification</h2>
         <ul class="space-y-4">

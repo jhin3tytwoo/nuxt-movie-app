@@ -1,6 +1,6 @@
 <template>
   <MainLayout>
-    <GradientBorder>
+    <GradientBorder class="py-4">
       <div class="min-h-screen m-4 p-[2px] relative">
         <!-- 🔍 Search + Filter -->
         <div class="flex items-center gap-3 px-4 md:px-8 py-4">
