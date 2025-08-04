@@ -3,7 +3,7 @@
     class="min-h-screen flex flex-col bg-black text-white md:grid md:grid-cols-[240px_1fr]"
   >
     <!-- เมนูด้านซ้าย (Desktop) -->
-    <aside class="hidden md:flex flex-col bg-black p-4 relative bg-black">
+    <aside class="hidden md:flex flex-col bg-black p-4 relative">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-extrabold">
           <span class="text-white">TEST</span
@@ -13,7 +13,7 @@
           <span class="material-icons">notifications</span>
         </NuxtLink>
       </div>
-      <nav class="flex flex-col gap-4 bg-black">
+      <nav class="flex flex-col gap-4">
         <NuxtLink
           to="/"
           class="p-2 rounded flex items-center gap-2"
@@ -62,6 +62,7 @@
           <span class="material-icons">account_circle</span> Login
         </NuxtLink>
       </div>
+
       <NuxtLink
         to="https://github.com/jhin3tytwoo/nuxt-movie-app"
         target="_blank"
@@ -86,7 +87,8 @@
 
     <!-- เนื้อหาหลัก -->
     <div class="flex-1 flex flex-col">
-      <main class="flex-1 pb-[70px]">
+      <!-- ปรับความสูง main ให้พอดีหน้าจอ แล้ว scroll ได้ -->
+      <main class="h-[calc(100vh-70px)] overflow-y-auto">
         <slot />
       </main>
 

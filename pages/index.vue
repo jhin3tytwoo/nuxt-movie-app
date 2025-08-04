@@ -1,7 +1,7 @@
 <template>
   <MainLayout>
-    <GradientBorder class="py-4">
-      <div class="min-h-screen m-4 p-[2px] relative">
+    <GradientBorder class="h-[calc(100vh-70px)] overflow-y-auto p-4">
+      <div class="p-[2px] relative">
         <!-- 🔍 Search + Filter -->
         <div class="flex items-center gap-3 px-4 md:px-8 py-4">
           <div
@@ -34,7 +34,7 @@
         <!-- Filters -->
         <transition name="fade">
           <div v-if="showFilters" class="px-4 md:px-8 py-4">
-            <!-- category -->
+            <!-- Category -->
             <div class="mb-4">
               <label class="block mb-2 font-semibold">Category</label>
               <div class="flex flex-wrap gap-2 hide-scrollbar">
@@ -43,17 +43,18 @@
                   :key="cat"
                   @click="selectedCategory = cat"
                   :class="[
-                    'px-3 py-1 rounded border cursor-pointer',
+                    'px-3 py-1 rounded border cursor-pointer transition-colors duration-200',
                     selectedCategory === cat
-                      ? 'bg-yellow-500 text-black border-yellow-500'
-                      : 'bg-gray-800 text-white border-gray-500 hover:bg-gray-600',
+                      ? 'bg-gray-700 text-white border-gray-700'
+                      : 'bg-black text-gray-400 border-gray-500 hover:bg-gray-700 hover:text-white',
                   ]"
                 >
                   {{ cat }}
                 </button>
               </div>
             </div>
-            <!-- length -->
+
+            <!-- Length -->
             <div>
               <label class="block mb-2 font-semibold">Length</label>
               <div class="flex flex-wrap gap-2 hide-scrollbar">
@@ -62,10 +63,10 @@
                   :key="len"
                   @click="selectedLength = len"
                   :class="[
-                    'px-3 py-1 rounded border cursor-pointer',
+                    'px-3 py-1 rounded border cursor-pointer transition-colors duration-200',
                     selectedLength === len
-                      ? 'bg-yellow-500 text-black border-yellow-500'
-                      : 'bg-gray-800 text-white border-gray-500 hover:bg-gray-600',
+                      ? 'bg-gray-700 text-white border-gray-700'
+                      : 'bg-black text-gray-400 border-gray-500 hover:bg-gray-700 hover:text-white',
                   ]"
                 >
                   {{ len }}
@@ -75,130 +76,144 @@
           </div>
         </transition>
 
-        <!-- 🎬 Movies List -->
-        <div class="px-4 md:px-8 py-4">
-          <!-- ถ้ามีผลลัพธ์ -->
-          <div
-            v-if="
-              searchTerm && searchTerm.length > 0 && filteredMovies.length > 0
-            "
-            class="text-white mb-2"
-          >
-            Results found: {{ filteredMovies.length }}
+        <!-- 🎬 Search Result -->
+        <div
+          v-if="
+            isSearching ||
+            selectedCategory !== 'All' ||
+            selectedLength !== 'All'
+          "
+          class="px-4 md:px-8 py-4"
+        >
+          <div v-if="filteredMovies.length > 0" class="text-white mb-2">
+            Search result: "{{ searchTerm }}"
           </div>
-
-          <!-- ถ้าไม่มีผลลัพธ์ -->
-          <div
-            v-else-if="
-              searchTerm && searchTerm.length > 0 && filteredMovies.length === 0
-            "
-            class="text-white mb-4 text-sm italic"
-          >
+          <div v-else class="text-white mb-4 text-sm italic">
             ไม่พบสาวที่ท่านกำลังหา โปรดติดต่อแอดมินถ้าอยากได้วาป
           </div>
 
-          <!-- แสดงรายการหนัง -->
-          <div class="flex overflow-x-auto gap-4 hide-scrollbar">
+          <div
+            v-if="filteredMovies.length > 0"
+            class="flex overflow-x-auto gap-3 hide-scrollbar"
+          >
             <div
               v-for="movie in filteredMovies"
-              :key="movie.id"
-              class="w-[180px] flex-shrink-0"
+              :key="'search-' + movie.id"
+              class="bg-gray-800 min-w-[45%] md:min-w-0 rounded-xl overflow-hidden flex flex-col shadow-lg"
+              style="width: 180px"
             >
-              <div class="bg-black rounded-xl overflow-hidden">
+              <div class="h-40 w-full overflow-hidden">
                 <img
                   :src="movie.image"
+                  class="w-full h-full object-cover rounded-t-xl"
                   :alt="movie.title"
-                  class="w-full h-80 object-cover rounded-xl"
                 />
+              </div>
+              <div class="p-2 flex flex-col flex-grow">
+                <p class="text-sm font-bold">{{ movie.title }}</p>
+                <p class="text-yellow-400 text-sm">⭐⭐⭐⭐☆</p>
+                <p class="text-xs text-gray-400">🕒 {{ movie.length }}</p>
+                <p class="text-xs text-gray-400">🌐 {{ movie.language }}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Recently Watched -->
-        <div class="px-4 md:px-8">
-          <div
-            v-if="
-              !(
-                searchTerm &&
-                searchTerm.length > 0 &&
-                filteredMovies.length === 0
-              )
-            "
-          >
-            <h2 class="text-xl font-bold mb-2">Recently watch</h2>
-            <div class="flex overflow-x-auto gap-3 hide-scrollbar">
+        <!-- ✅ แสดงเฉพาะเมื่อไม่มีการค้นหา และไม่มีการเลือกฟิลเตอร์ -->
+        <template
+          v-if="
+            !isSearching &&
+            selectedCategory === 'All' &&
+            selectedLength === 'All'
+          "
+        >
+          <!-- 🎬 Movie List -->
+          <div class="px-4 md:px-8 py-4">
+            <!-- ✅ Container นี้จะซ่อนข้อมูลที่เกิน -->
+            <div class="flex gap-4 overflow-x-hidden w-full">
               <div
-                v-for="movie in filteredMovies.slice(0, 5)"
-                :key="'recent-' + movie.id"
-                class="min-w-[60%] md:min-w-[18%] overflow-hidden shadow-lg"
-                style="width: 180px"
+                v-for="movie in filteredMovies"
+                :key="movie.id"
+                class="w-[180px] flex-shrink-0"
               >
-                <div class="p-2 flex flex-col bg-gray-800 rounded-xl">
-                  <div class="overflow-hidden mb-2 h-40 w-full">
-                    <img
-                      :src="movie.image"
-                      class="w-full h-full object-cover rounded-xl"
-                      :alt="movie.title"
-                    />
-                  </div>
-                  <p class="text-sm font-semibold">{{ movie.title }}</p>
-                  <p class="text-xs opacity-60">EP.2 “Last Dance”</p>
+                <div class="bg-black rounded-xl overflow-hidden">
+                  <img
+                    :src="movie.image"
+                    :alt="movie.title"
+                    class="object-cover rounded-xl"
+                    style="width: 306px; height: 461px"
+                  />
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- New Coming -->
-        <div class="px-4 md:px-8 mt-6">
-          <div
-            v-if="
-              !(
-                searchTerm &&
-                searchTerm.length > 0 &&
-                filteredMovies.length === 0
-              )
-            "
-          >
-            <h2 class="text-xl font-bold mb-2">New coming</h2>
+          <!-- ✅ Recently Watched -->
+          <div class="px-4 md:px-8">
+            <h2 class="text-xl font-bold mb-2 text-white">Recently watch</h2>
+            <div class="flex overflow-x-auto gap-3 hide-scrollbar">
+              <div
+                v-for="movie in filteredMovies.slice(0, 5)"
+                :key="'recent-' + movie.id"
+                class="relative min-w-[60%] md:min-w-[18%] shadow-lg rounded-xl overflow-hidden"
+                style="width: 224px; height: 138px"
+              >
+                <img
+                  :src="movie.image"
+                  class="w-full h-full object-cover"
+                  :alt="movie.title"
+                />
+                <!-- Overlay Title -->
+                <div
+                  class="absolute bottom-0 left-0 w-full px-3 py-2 text-white text-xs bg-gradient-to-t from-black/70 to-transparent"
+                >
+                  <p class="font-semibold text-sm leading-tight drop-shadow">
+                    {{ movie.title }}
+                  </p>
+                  <p class="text-[11px] opacity-80 leading-none drop-shadow">
+                    EP.2 “Last Dance”
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ✅ New Coming -->
+          <div class="px-4 md:px-8 mt-6 py-4 bg-black">
+            <h2 class="text-xl font-bold mb-2 text-white">New coming</h2>
             <div class="flex overflow-x-auto gap-3 hide-scrollbar">
               <div
                 v-for="movie in filteredMovies.slice(0, 5)"
                 :key="'new-' + movie.id"
-                class="bg-gray-800 min-w-[45%] md:min-w-0 rounded-xl overflow-hidden flex flex-col shadow-lg"
+                class="bg-black min-w-[45%] md:min-w-0 rounded-xl overflow-hidden flex flex-col shadow-lg text-white"
                 style="width: 180px"
               >
                 <div class="h-40 w-full overflow-hidden">
                   <img
                     :src="movie.image"
-                    class="w-full h-full object-cover rounded-t-xl"
+                    class="w-full h-full object-cover rounded-xl"
                     :alt="movie.title"
                   />
                 </div>
                 <div class="p-2 flex flex-col flex-grow">
-                  <p class="text-sm font-bold">{{ movie.title }}</p>
-                  <p class="text-yellow-400 text-sm">⭐⭐⭐⭐☆</p>
-                  <p class="text-xs text-gray-400">🕒 {{ movie.length }}</p>
-                  <p class="text-xs text-gray-400">🌐 {{ movie.language }}</p>
+                  <p class="text-sm font-bold leading-tight">
+                    {{ movie.title }}
+                  </p>
+                  <p class="text-yellow-400 text-sm leading-tight">⭐⭐⭐⭐☆</p>
+                  <p class="text-xs text-gray-400 leading-tight">
+                    🕒 {{ movie.length }}
+                  </p>
+                  <p class="text-xs text-gray-400 leading-tight">
+                    🌐 {{ movie.language }}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Action -->
-        <div class="px-4 md:px-8 mt-6 mb-10">
-          <div
-            v-if="
-              !(
-                searchTerm &&
-                searchTerm.length > 0 &&
-                filteredMovies.length === 0
-              )
-            "
-          >
-            <h2 class="text-xl font-bold mb-2">Action</h2>
+          <!-- ✅ Action -->
+          <div class="px-4 md:px-8 mt-6 mb-10">
+            <h2 class="text-xl font-bold mb-2 text-white">Action</h2>
             <div class="flex overflow-x-auto gap-3 hide-scrollbar">
               <div
                 v-for="movie in filteredMovies
@@ -216,7 +231,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </template>
       </div>
     </GradientBorder>
   </MainLayout>
@@ -246,6 +261,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener("resize", checkScreenWidth);
 });
+
+const isSearching = computed(() => searchTerm.value.trim().length > 0);
 
 const categories = computed(() => {
   const cats = movies.value.map((m) => m.category);
@@ -301,5 +318,8 @@ const filteredMovies = computed(() => {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+.drop-shadow {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 </style>

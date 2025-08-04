@@ -34,7 +34,7 @@
     ></div>
 
     <!-- Slot สำหรับเนื้อหาด้านใน -->
-    <div class="relative z-20">
+    <div class="relative z-20 h-[calc(100vh-70px)] overflow-y-auto">
       <slot />
     </div>
   </div>
