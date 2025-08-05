@@ -76,13 +76,13 @@
     <div class="flex-1 flex flex-col min-w-0 relative">
       <!-- เงาด้านบนสุด (มือถือ: ขอบบนล่าง, เดสก์ท็อป: ขอบซ้าย) -->
       <div
-        class="absolute top-0 left-0 right-0 bottom-0 z-[999] pointer-events-none rounded-[40px] mx-0 my-4 md:ml-4 md:mr-0 md:my-0"
+        class="absolute top-[56px] bottom-[64px] left-0 right-0 z-[999] pointer-events-none rounded-[40px] mx-0 my-0 md:top-0 md:bottom-0 md:ml-4 md:mr-0"
         style="box-shadow: 0 0 74px #ff6a00; border: 2px solid #ffb700"
       ></div>
 
       <!-- แถบบนมือถือ -->
       <div
-        class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl z-10"
+        class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl z-10 h-[56px]"
       >
         <h1 class="text-xl font-bold">
           <span class="text-white">TEST</span>
@@ -96,7 +96,7 @@
       <!-- เนื้อหาหลัก -->
       <main class="relative z-10 overflow-hidden flex-1 md:flex-1">
         <div
-          class="h-[calc(100vh-112px)] overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen"
+          class="overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen h-[calc(100vh-120px)]"
         >
           <slot />
         </div>
@@ -104,7 +104,7 @@
 
       <!-- เมนูล่างมือถือ -->
       <nav
-        class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around bg-black p-2 rounded-t-3xl"
+        class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around bg-black p-2 rounded-t-3xl h-[64px]"
       >
         <NuxtLink
           to="/"
