@@ -1,24 +1,22 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
   vite: {
-    plugins: [
-      tailwindcss(),
-    ],
+    plugins: [tailwindcss()],
   },
-  modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui'],
+  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/ui", "@nuxtjs/device"],
 
   app: {
     head: {
       link: [
         {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/icon?family=Material+Icons",
         },
       ],
     },
   },
-})
+});

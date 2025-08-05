@@ -6,8 +6,8 @@
     <aside class="hidden md:flex flex-col p-4 relative">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-extrabold">
-          <span class="text-white">TEST</span
-          ><span class="text-yellow-400">HUB</span>
+          <span class="text-white">TEST</span>
+          <span class="text-yellow-400">HUB</span>
         </h1>
         <NuxtLink to="/NotificationPage" class="text-white">
           <span class="material-icons">notifications</span>
@@ -73,14 +73,20 @@
     </aside>
 
     <!-- คอนเทนต์หลัก -->
-    <div class="flex-1 flex flex-col min-w-0">
+    <div class="flex-1 flex flex-col min-w-0 relative">
+      <!-- เงาด้านบนสุด (มือถือ: ขอบบนล่าง, เดสก์ท็อป: ขอบซ้าย) -->
+      <div
+        class="absolute top-0 left-0 right-0 bottom-0 z-[999] pointer-events-none rounded-[40px] mx-0 my-4 md:ml-4 md:mr-0 md:my-0"
+        style="box-shadow: 0 0 74px #ff6a00; border: 2px solid #ffb700"
+      ></div>
+
       <!-- แถบบนมือถือ -->
       <div
-        class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl"
+        class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl z-10"
       >
         <h1 class="text-xl font-bold">
-          <span class="text-white">TEST</span
-          ><span class="text-yellow-400">HUB</span>
+          <span class="text-white">TEST</span>
+          <span class="text-yellow-400">HUB</span>
         </h1>
         <NuxtLink to="/NotificationPage">
           <span class="material-icons text-white">notifications</span>
@@ -88,10 +94,9 @@
       </div>
 
       <!-- เนื้อหาหลัก -->
-      <main class="flex-1 overflow-hidden pb-16 md:pb-0">
+      <main class="relative z-10 overflow-hidden flex-1 md:flex-1">
         <div
-          class="h-full overflow-y-auto rounded-[40px] shadow-[0_0_74px_#FF6A00]"
-          style="border: 2px solid #ffb700"
+          class="h-[calc(100vh-112px)] overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen"
         >
           <slot />
         </div>
