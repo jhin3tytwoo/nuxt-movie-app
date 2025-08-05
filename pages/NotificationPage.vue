@@ -8,12 +8,12 @@ const { movies } = useMovies();
 const notifications = ref([
   {
     id: 1,
-    message: "🎉 New movie has been added!",
+    message: "New movie has been added!",
     movieId: 1,
   },
   {
     id: 2,
-    message: "🎉 New movie has been added!",
+    message: "New movie has been added!",
     movieId: 2,
   },
 ]);
@@ -32,7 +32,9 @@ const getMovieById = (id) =>
 <template>
   <MainLayout>
     <div class="md:p-8 min-h-screen m-4 p-[2px] relative">
-      <h2 class="text-3xl font-semibold mb-4 text-white">🔔 Notification</h2>
+      <h2 class="text-3xl font-semibold mb-4 text-white">
+        <span class="material-icons">notifications</span> Notification
+      </h2>
       <ul class="space-y-4">
         <li v-for="note in notifications" :key="note.id">
           <div

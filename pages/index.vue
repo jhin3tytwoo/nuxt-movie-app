@@ -29,7 +29,6 @@
           <span class="hidden md:inline">Filter</span>
         </button>
       </div>
-
       <!-- Filters -->
       <transition name="fade">
         <div v-if="showFilters" class="px-4 md:px-8 py-4">
@@ -42,17 +41,17 @@
                 :key="cat"
                 @click="selectedCategory = cat"
                 :class="[
-                  'flex-shrink-0 px-3 py-1 rounded border cursor-pointer transition-colors duration-200',
+                  'flex-shrink-0 px-3 py-1 border cursor-pointer transition-colors duration-200',
                   selectedCategory === cat
                     ? 'bg-gray-700 text-white border-gray-700'
                     : 'bg-black text-gray-400 border-gray-500 hover:bg-gray-700 hover:text-white',
                 ]"
+                style="border-radius: 55px; border-width: 1px"
               >
                 {{ cat }}
               </button>
             </div>
           </div>
-
           <!-- Length -->
           <div>
             <label class="block mb-2 font-semibold">Length</label>
@@ -62,11 +61,12 @@
                 :key="len"
                 @click="selectedLength = len"
                 :class="[
-                  'flex-shrink-0 px-3 py-1 rounded border cursor-pointer transition-colors duration-200',
+                  'flex-shrink-0 px-3 py-1 border cursor-pointer transition-colors duration-200',
                   selectedLength === len
                     ? 'bg-gray-700 text-white border-gray-700'
                     : 'bg-black text-gray-400 border-gray-500 hover:bg-gray-700 hover:text-white',
                 ]"
+                style="border-radius: 55px; border-width: 1px"
               >
                 {{ len }}
               </button>
@@ -74,7 +74,6 @@
           </div>
         </div>
       </transition>
-
       <!-- 🎬 Search Result -->
       <div
         v-if="
@@ -82,42 +81,50 @@
         "
         class="px-4 md:px-8 py-4"
       >
-        <div v-if="filteredMovies.length > 0" class="text-white mb-2">
+        <div v-if="filteredMovies.length > 0" class="text-white mb-2 px-4">
           Search result: "{{ searchTerm }}"
         </div>
-        <div v-else class="text-white mb-4 text-sm italic">
+        <div v-else class="text-white mb-4 text-sm italic text-center">
           ไม่พบสาวที่ท่านกำลังหา โปรดติดต่อแอดมินถ้าอยากได้วาป
         </div>
 
-        <div
-          v-if="filteredMovies.length > 0"
-          class="overflow-x-auto hide-scrollbar pb-4"
-        >
-          <div class="flex gap-3 w-max">
+        <div class="pb-4">
+          <div
+            class="flex flex-wrap gap-3"
+            :class="isDesktop ? 'justify-start' : 'justify-evenly'"
+          >
             <div
               v-for="movie in filteredMovies"
               :key="'search-' + movie.id"
-              class="bg-gray-800 rounded-xl overflow-hidden flex flex-col shadow-lg"
-              style="width: 180px"
+              class="bg-black rounded-xl overflow-hidden flex flex-col shadow-lg text-white flex-shrink-0"
+              :class="isDesktop ? 'w-[275px] h-[290px]' : 'w-[139px] h-[230px]'"
             >
-              <div class="h-40 w-full overflow-hidden">
+              <div
+                class="w-full overflow-hidden"
+                :class="isDesktop ? 'h-[162px]' : 'h-[96px]'"
+              >
                 <img
                   :src="movie.image"
-                  class="w-full h-full object-cover rounded-t-xl"
+                  class="w-full h-full object-cover rounded-xl"
                   :alt="movie.title"
                 />
               </div>
               <div class="p-2 flex flex-col flex-grow">
-                <p class="text-sm font-bold">{{ movie.title }}</p>
-                <p class="text-yellow-400 text-sm">⭐⭐⭐⭐☆</p>
-                <p class="text-xs text-gray-400">🕒 {{ movie.length }}</p>
-                <p class="text-xs text-gray-400">🌐 {{ movie.language }}</p>
+                <p class="text-sm font-bold leading-tight">
+                  {{ movie.title }}
+                </p>
+                <p class="text-yellow-400 text-sm leading-tight">⭐⭐⭐⭐☆</p>
+                <p class="text-xs text-gray-400 leading-tight">
+                  🕒 {{ movie.length }}
+                </p>
+                <p class="text-xs text-gray-400 leading-tight">
+                  🌐 {{ movie.language }}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       <!-- ✅ แสดงเฉพาะเมื่อไม่มีการค้นหา และไม่มีการเลือกฟิลเตอร์ -->
       <template
         v-if="
@@ -131,7 +138,7 @@
               <div
                 v-for="movie in filteredMovies.slice(0, 5)"
                 :key="movie.id"
-                class="flex-shrink-0"
+                class="flex-shrink-0 relative group"
                 :style="isDesktop ? 'width: 306px' : 'width: 183px'"
               >
                 <img
@@ -143,6 +150,22 @@
                       : 'width: 183px; height: 275px'
                   "
                 />
+
+                <!-- Overlay -->
+                <div
+                  class="absolute inset-0 flex items-center justify-center rounded-xl bg-black bg-opacity-50 opacity-0 group-hover:opacity-50 transition-opacity"
+                  :style="
+                    isDesktop
+                      ? 'width: 306px; height: 461px'
+                      : 'width: 183px; height: 275px'
+                  "
+                >
+                  <span
+                    class="material-icons text-white text-6xl select-none pointer-events-none"
+                  >
+                    play_circle_filled
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -182,7 +205,6 @@
             </div>
           </div>
         </div>
-
         <!-- ✅ New Coming -->
         <div class="px-4 md:px-8">
           <h2 class="text-xl font-bold mb-4 text-white">New coming</h2>
@@ -220,25 +242,43 @@
             </div>
           </div>
         </div>
-
-        <!-- ✅ Action -->
-        <div class="px-4 md:px-8">
-          <h2 class="text-xl font-bold mb-4 text-white">Action</h2>
+        <!-- ✅ category -->
+        <div
+          v-for="category in uniqueCategories"
+          :key="category"
+          class="px-4 md:px-8"
+        >
+          <h2 class="text-xl font-bold mb-4 text-white">{{ category }}</h2>
           <div class="overflow-x-auto hide-scrollbar pb-4">
             <div class="flex gap-3 w-max">
               <div
-                v-for="movie in filteredMovies
-                  .filter((m) => m.category === 'Action')
-                  .slice(0, 5)"
-                :key="'action-' + movie.id"
-                class="bg-gray-800 overflow-hidden rounded-xl shadow-lg flex-shrink-0"
-                style="width: 180px; height: 240px"
+                v-for="movie in movies.filter((m) => m.category === category)"
+                :key="category + '-' + movie.id"
+                class="bg-black rounded-xl overflow-hidden flex flex-col shadow-lg text-white flex-shrink-0"
+                :style="isDesktop ? 'width: 275px' : 'width: 139px'"
               >
-                <img
-                  :src="movie.image"
-                  class="w-full h-full object-cover rounded-xl"
-                  :alt="movie.title"
-                />
+                <div
+                  class="w-full overflow-hidden"
+                  :style="isDesktop ? 'height: 138px' : 'height: 96px'"
+                >
+                  <img
+                    :src="movie.image"
+                    class="w-full h-full object-cover rounded-xl"
+                    :alt="movie.title"
+                  />
+                </div>
+                <div class="p-2 flex flex-col flex-grow">
+                  <p class="text-sm font-bold leading-tight">
+                    {{ movie.title }}
+                  </p>
+                  <p class="text-yellow-400 text-sm leading-tight">⭐⭐⭐⭐☆</p>
+                  <p class="text-xs text-gray-400 leading-tight">
+                    🕒 {{ movie.length }}
+                  </p>
+                  <p class="text-xs text-gray-400 leading-tight">
+                    🌐 {{ movie.language }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -311,6 +351,10 @@ const filteredMovies = computed(() => {
     return matchesSearch && matchesCategory && matchesLength;
   });
 });
+
+const uniqueCategories = computed(() => [
+  ...new Set(movies.value.map((m) => m.category)),
+]);
 </script>
 
 <style scoped>
