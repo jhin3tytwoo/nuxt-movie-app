@@ -3,7 +3,7 @@
     class="min-h-screen flex flex-col bg-black text-white md:grid md:grid-cols-[240px_1fr]"
   >
     <!-- เมนูด้านซ้าย (Desktop) -->
-    <aside class="hidden md:flex flex-col bg-black p-4 relative">
+    <aside class="hidden md:flex flex-col p-4 relative">
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-extrabold">
           <span class="text-white">TEST</span
@@ -72,24 +72,29 @@
       </NuxtLink>
     </aside>
 
-    <!-- แถบบนมือถือ -->
-    <div
-      class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl"
-    >
-      <h1 class="text-xl font-bold">
-        <span class="text-white">TEST</span
-        ><span class="text-yellow-400">HUB</span>
-      </h1>
-      <NuxtLink to="/NotificationPage">
-        <span class="material-icons text-white">notifications</span>
-      </NuxtLink>
-    </div>
+    <!-- คอนเทนต์หลัก -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- แถบบนมือถือ -->
+      <div
+        class="md:hidden flex items-center justify-between px-4 py-3 bg-black rounded-b-3xl"
+      >
+        <h1 class="text-xl font-bold">
+          <span class="text-white">TEST</span
+          ><span class="text-yellow-400">HUB</span>
+        </h1>
+        <NuxtLink to="/NotificationPage">
+          <span class="material-icons text-white">notifications</span>
+        </NuxtLink>
+      </div>
 
-    <!-- เนื้อหาหลัก -->
-    <div class="flex-1 flex flex-col">
-      <!-- ปรับความสูง main ให้พอดีหน้าจอ แล้ว scroll ได้ -->
-      <main class="h-[calc(100vh-70px)] overflow-y-auto">
-        <slot />
+      <!-- เนื้อหาหลัก -->
+      <main class="flex-1 overflow-hidden pb-16 md:pb-0">
+        <div
+          class="h-full overflow-y-auto rounded-[40px] shadow-[0_0_74px_#FF6A00]"
+          style="border: 2px solid #ffb700"
+        >
+          <slot />
+        </div>
       </main>
 
       <!-- เมนูล่างมือถือ -->
