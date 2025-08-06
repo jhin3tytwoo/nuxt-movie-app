@@ -96,7 +96,7 @@
       <!-- เนื้อหาหลัก -->
       <main class="relative z-10 overflow-hidden flex-1 md:flex-1">
         <div
-          class="overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen h-[calc(100vh-120px)]"
+          class="overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen h-[calc(100vh-120px)] p-2 box-border"
         >
           <slot />
         </div>
