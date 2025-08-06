@@ -31,7 +31,7 @@ const getMovieById = (id) =>
 
 <template>
   <MainLayout>
-    <div class="md:p-8 min-h-screen m-4 p-[2px] relative">
+    <div class="md:p-8 min-h-screen m-4 p-2 relative rounded-[40px]">
       <h2 class="text-3xl font-semibold mb-4 text-white">
         <span class="material-icons">notifications</span> Notification
       </h2>

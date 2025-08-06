@@ -24,9 +24,9 @@ const liveChannels = ref([
 
 <template>
   <MainLayout>
-    <div class="h-full overflow-y-auto p-4 md:p-8">
-      <h2 class="text-3xl font-semibold mb-6 flex items-center text-white">
-        <span class="material-icons mr-2">live_tv</span> Live now
+    <div class="h-full overflow-y-auto p-2 md:p-8 rounded-[40px]">
+      <h2 class="text-3xl font-semibold m-3 flex items-center text-white gap-2">
+        <span class="material-icons text-yellow-400">live_tv</span> Live now
       </h2>
       <div
         class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"

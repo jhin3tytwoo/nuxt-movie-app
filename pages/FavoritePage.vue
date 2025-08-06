@@ -7,10 +7,8 @@ const { movies } = useMovies(); // Assuming all movies are favorited
 
 <template>
   <MainLayout>
-    <div class="h-full overflow-y-auto p-4 md:p-8">
-      <h2
-        class="text-3xl font-semibold mb-6 flex items-center gap-2 text-white"
-      >
+    <div class="h-full overflow-y-auto p-2 md:p-8 rounded-[40px]">
+      <h2 class="text-3xl font-semibold m-3 flex items-center gap-2 text-white">
         <span class="material-icons text-yellow-400">favorite</span>
         Favorite
       </h2>

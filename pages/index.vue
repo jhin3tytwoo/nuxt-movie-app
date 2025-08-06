@@ -1,6 +1,6 @@
 <template>
   <MainLayout>
-    <div class="h-full overflow-y-auto">
+    <div class="h-full overflow-y-auto rounded-[40px]">
       <!-- 🔍 Search + Filter -->
       <div class="flex items-center gap-3 px-4 md:px-8 py-4">
         <div
