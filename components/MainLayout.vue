@@ -47,6 +47,17 @@
         >
           <span class="material-icons">favorite</span> Favorite
         </NuxtLink>
+        <NuxtLink
+          to="/NasaPage"
+          class="p-2 rounded flex items-center gap-2"
+          :class="{
+            'bg-gray-700 text-yellow-400 border-l-4 border-yellow-400 pl-2':
+              $route.path === '/NasaPage',
+            'text-white hover:bg-gray-800': $route.path !== '/NasaPage',
+          }"
+        >
+          <span class="material-icons">favorite</span> Favorite
+        </NuxtLink>
       </nav>
 
       <div class="mt-auto pt-4">
