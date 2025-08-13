@@ -5,7 +5,7 @@
   >
     <div
       class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4"
-    ></div>
+    />
     <p class="text-gray-400 text-lg">Loading news...</p>
   </section>
 
@@ -29,8 +29,8 @@
       <h3 class="text-lg font-semibold text-red-400 mb-2">An Error Occurred</h3>
       <p class="text-red-300 mb-4">{{ error }}</p>
       <button
-        @click="$emit('retry')"
         class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+        @click="$emit('retry')"
       >
         Try Again
       </button>
@@ -59,8 +59,8 @@
         Try changing your search terms or filters
       </p>
       <button
-        @click="$emit('clear-search')"
         class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors"
+        @click="$emit('clear-search')"
       >
         Clear Search
       </button>

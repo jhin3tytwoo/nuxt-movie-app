@@ -19,18 +19,18 @@
       </svg>
       <input
         :value="searchQuery"
+        class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
         @input="$emit('update:searchQuery', $event.target.value)"
         type="text"
         placeholder="Search news..."
-        class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
       />
     </div>
 
     <!-- Title Dropdown Filter -->
     <div class="w-full max-w-xs">
       <select
-        @change="$emit('set-title', $event.target.value)"
         class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition duration-200"
+        @change="$emit('set-title', $event.target.value)"
       >
         <option value="">All Sources</option>
         <option v-for="t in uniqueTitles" :key="t" :value="t">
@@ -44,9 +44,9 @@
       <button
         v-for="option in filterOptions"
         :key="option.value"
+        class="px-5 py-2 rounded-xl font-medium text-sm transition transform duration-200 hover:scale-105 active:scale-95"
         @click="$emit('set-data-type', option.value)"
         :class="buttonClass(option.value)"
-        class="px-5 py-2 rounded-xl font-medium text-sm transition transform duration-200 hover:scale-105 active:scale-95"
       >
         {{ option.label }}
         <span v-if="option.count !== undefined" class="ml-1 text-xs opacity-75">
