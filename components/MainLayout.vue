@@ -48,15 +48,15 @@
           <span class="material-icons">favorite</span> Favorite
         </NuxtLink>
         <NuxtLink
-          to="/NasaPage"
+          to="/NewsPage"
           class="p-2 rounded flex items-center gap-2"
           :class="{
             'bg-gray-700 text-yellow-400 border-l-4 border-yellow-400 pl-2':
-              $route.path === '/NasaPage',
-            'text-white hover:bg-gray-800': $route.path !== '/NasaPage',
+              $route.path === '/NewsPage',
+            'text-white hover:bg-gray-800': $route.path !== '/NewsPage',
           }"
         >
-          <span class="material-icons">favorite</span> Favorite
+          <span class="material-icons">newspaper</span> News
         </NuxtLink>
       </nav>
 
@@ -149,6 +149,17 @@
         >
           <span class="material-icons text-lg">favorite</span>
           <span class="text-xs">Favorite</span>
+        </NuxtLink>
+        <NuxtLink
+          to="/NewsPage"
+          class="flex flex-col items-center"
+          :class="{
+            'text-yellow-400': $route.path === '/NewsPage',
+            'text-gray-400': $route.path !== '/NewsPage',
+          }"
+        >
+          <span class="material-icons text-lg">newspaper</span>
+          <span class="text-xs">News</span>
         </NuxtLink>
         <NuxtLink
           to="/LoginPage"
