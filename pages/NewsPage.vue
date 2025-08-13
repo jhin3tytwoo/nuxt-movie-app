@@ -75,13 +75,10 @@ const currentPage = ref(1);
 const itemsPerPage = 10;
 const totalResults = ref(0);
 const selectedTitle = ref("");
-
 const API_KEY = "4a6a7831-db13-4869-85b6-f1ae7eddee4d";
 const API_URL = "https://newsapi.ai/api/v1/article/getArticles";
-
 const filteredArticles = computed(() => {
   let filtered = articles.value;
-
   if (searchQuery.value) {
     const q = searchQuery.value.toLowerCase();
     filtered = filtered.filter(
@@ -91,23 +88,37 @@ const filteredArticles = computed(() => {
         a.source.title.toLowerCase().includes(q)
     );
   }
-
   if (selectedDataType.value !== "all") {
     filtered = filtered.filter((a) => a.dataType === selectedDataType.value);
   }
-
   if (selectedTitle.value) {
     filtered = filtered.filter((a) => a.source.title === selectedTitle.value);
   }
-
-  totalResults.value = filtered.length;
-
-  const start = (currentPage.value - 1) * itemsPerPage;
-  return filtered.slice(start, start + itemsPerPage);
+  return filtered.slice(
+    (currentPage.value - 1) * itemsPerPage,
+    currentPage.value * itemsPerPage
+  );
 });
-
+watchEffect(() => {
+  let filtered = articles.value;
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
+    filtered = filtered.filter(
+      (a) =>
+        a.title.toLowerCase().includes(q) ||
+        a.body.toLowerCase().includes(q) ||
+        a.source.title.toLowerCase().includes(q)
+    );
+  }
+  if (selectedDataType.value !== "all") {
+    filtered = filtered.filter((a) => a.dataType === selectedDataType.value);
+  }
+  if (selectedTitle.value) {
+    filtered = filtered.filter((a) => a.source.title === selectedTitle.value);
+  }
+  totalResults.value = filtered.length;
+});
 const totalPages = computed(() => Math.ceil(totalResults.value / itemsPerPage));
-
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
   const diffDays = Math.floor(
@@ -121,40 +132,33 @@ function formatDate(dateStr: string) {
     timeStyle: "short",
   });
 }
-
 function setDataType(type: "all" | "news" | "pr") {
   selectedDataType.value = type;
   currentPage.value = 1;
 }
-
 function setTitleFilter(title: string) {
   selectedTitle.value = title;
   currentPage.value = 1;
 }
-
 function goToPage(page: number) {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
-
 function clearSearch() {
   searchQuery.value = "";
   selectedDataType.value = "all";
   currentPage.value = 1;
 }
-
 function getDataTypeBadgeClass(type: "news" | "pr") {
   return type === "news"
     ? "bg-yellow-400/20 text-yellow-400"
     : "bg-blue-400/20 text-blue-400";
 }
-
 async function fetchNews() {
   isLoading.value = true;
   error.value = null;
-
   try {
     const payload = {
       action: "getArticles",
@@ -172,27 +176,26 @@ async function fetchNews() {
       resultType: "articles",
       apiKey: API_KEY,
     };
-
     const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
     if (!res.ok) throw new Error(`Connection error (${res.status})`);
-
     const data = await res.json();
-
     console.log("API raw data:", data);
     console.log("Articles:", data?.articles?.results);
-
     if (data?.articles?.results) {
       articles.value = data.articles.results;
     } else {
       throw new Error("Unable to fetch news data");
     }
-  } catch (err: any) {
-    error.value = err.message || "Error loading news";
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      error.value = err.message;
+    } else {
+      error.value = String(err);
+    }
   } finally {
     isLoading.value = false;
   }
