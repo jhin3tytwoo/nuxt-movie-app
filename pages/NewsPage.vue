@@ -1,69 +1,60 @@
 <template>
   <MainLayout>
-    <div
-      class="h-full overflow-y-auto rounded-[40px] p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-    >
-      <!-- Header Section -->
-      <div class="mb-4">
+    <div class="h-full overflow-y-auto rounded-[40px] p-6 text-white">
+      <!-- Header -->
+      <header class="mb-4">
         <h1 class="text-4xl font-bold mb-2 text-yellow-400">Latest News</h1>
         <p class="text-gray-400">
           Stay updated with interesting news and announcements
         </p>
-      </div>
-      <!-- Search and Filter Section -->
-      <div class="mb-4">
-        <div
-          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
-        >
-          <!-- Search Input -->
-          <div class="relative flex-1 max-w-md">
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-            >
-              <svg
-                class="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <input
-              v-model="searchQuery"
-              @input="onSearchChange"
-              type="text"
-              placeholder="Search news..."
-              class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+      </header>
+      <!-- Search & Filter -->
+      <section
+        class="mb-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
+      >
+        <div class="relative flex-1 max-w-md">
+          <svg
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
-          </div>
-          <!-- Filter Buttons -->
-          <div class="flex gap-2 flex-wrap">
-            <button
-              v-for="option in filterOptions"
-              :key="option.value"
-              @click="setDataType(option.value)"
-              :class="buttonClass(option.value)"
-              class="px-6 py-3 rounded-xl font-medium transition-all duration-200 hover:scale-105 active:scale-95"
-            >
-              {{ option.label }}
-              <span
-                v-if="option.count !== undefined"
-                class="ml-2 text-xs opacity-75"
-                >({{ option.count }})</span
-              >
-            </button>
-          </div>
+          </svg>
+          <input
+            v-model="searchQuery"
+            @input="onSearchChange"
+            type="text"
+            placeholder="Search news..."
+            class="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          />
         </div>
-      </div>
-      <!-- Stats Bar -->
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-4 sm:mb-6 text-sm text-gray-400"
+
+        <div class="flex gap-2 flex-wrap">
+          <button
+            v-for="option in filterOptions"
+            :key="option.value"
+            @click="setDataType(option.value)"
+            :class="buttonClass(option.value)"
+            class="px-6 py-3 rounded-xl font-medium transition transform duration-200 hover:scale-105 active:scale-95"
+          >
+            {{ option.label }}
+            <span
+              v-if="option.count !== undefined"
+              class="ml-2 text-xs opacity-75"
+              >({{ option.count }})</span
+            >
+          </button>
+        </div>
+      </section>
+      <!-- Stats -->
+      <section
+        class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-400"
       >
         <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
           <span>Found {{ totalResults }} items</span>
@@ -74,9 +65,10 @@
         <div class="flex items-center gap-2">
           <span>Page {{ currentPage }} of {{ totalPages }}</span>
         </div>
-      </div>
-      <!-- Loading State -->
-      <div
+      </section>
+
+      <!-- Loading -->
+      <section
         v-if="isLoading"
         class="flex flex-col items-center justify-center py-16"
       >
@@ -84,9 +76,10 @@
           class="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4"
         ></div>
         <p class="text-gray-400 text-lg">Loading news...</p>
-      </div>
-      <!-- Error State -->
-      <div v-else-if="error" class="text-center py-16">
+      </section>
+
+      <!-- Error -->
+      <section v-else-if="error" class="text-center py-16">
         <div
           class="bg-red-500/10 border border-red-500/20 rounded-xl p-6 max-w-md mx-auto"
         >
@@ -114,10 +107,11 @@
             Try Again
           </button>
         </div>
-      </div>
-      <!-- Empty State -->
-      <div
-        v-else-if="filteredArticles.length === 0 && !isLoading"
+      </section>
+
+      <!-- Empty -->
+      <section
+        v-else-if="filteredArticles.length === 0"
         class="text-center py-16"
       >
         <div
@@ -147,19 +141,19 @@
             Clear Search
           </button>
         </div>
-      </div>
+      </section>
+
       <!-- News Grid -->
-      <div v-else>
+      <section v-else>
         <div
           class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mb-8"
         >
           <article
-            v-for="(article, index) in filteredArticles"
+            v-for="(article, i) in filteredArticles"
             :key="article.uri"
             class="group bg-gray-800/60 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1"
-            :style="{ animationDelay: `${index * 50}ms` }"
+            :style="{ animationDelay: `${i * 50}ms` }"
           >
-            <!-- Image -->
             <div class="relative overflow-hidden h-48">
               <img
                 v-if="article.image"
@@ -186,8 +180,6 @@
                   />
                 </svg>
               </div>
-
-              <!-- Data Type Badge -->
               <div class="absolute top-3 right-3">
                 <span
                   :class="getDataTypeBadgeClass(article.dataType)"
@@ -197,14 +189,13 @@
                 </span>
               </div>
             </div>
-            <!-- Content -->
+
             <div class="p-6">
               <h3
                 class="font-bold text-lg mb-3 line-clamp-2 group-hover:text-blue-400 transition-colors"
               >
                 {{ article.title }}
               </h3>
-
               <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
                 <svg
                   class="h-4 w-4"
@@ -219,17 +210,15 @@
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span>{{ formatDate(article.dateTimePub) }}</span>
-                <span>•</span>
-                <span class="truncate">{{ article.source.title }}</span>
+                <span>{{ formatDate(article.dateTimePub) }}</span
+                ><span>•</span
+                ><span class="truncate">{{ article.source.title }}</span>
               </div>
-
               <p
                 class="text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed"
               >
                 {{ article.body }}
               </p>
-
               <a
                 :href="article.url"
                 target="_blank"
@@ -256,10 +245,9 @@
         </div>
 
         <!-- Pagination -->
-        <div
+        <nav
           class="flex items-center justify-between bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50"
         >
-          <!-- ข้อความ Showing ซ่อนบนมือถือ -->
           <div
             class="flex items-center gap-2 text-sm text-gray-400 sm:flex hidden"
           >
@@ -270,7 +258,6 @@
             </span>
           </div>
 
-          <!-- ปุ่มหน้าเพจ -->
           <div
             class="flex items-center gap-2 flex-1 justify-center sm:justify-end"
           >
@@ -281,7 +268,7 @@
             >
               ←
             </button>
-            <!-- Page Numbers -->
+
             <div class="flex gap-1">
               <button
                 v-for="page in visiblePages"
@@ -297,6 +284,7 @@
                 {{ page }}
               </button>
             </div>
+
             <button
               @click="goToPage(currentPage + 1)"
               :disabled="currentPage >= totalPages"
@@ -305,8 +293,8 @@
               →
             </button>
           </div>
-        </div>
-      </div>
+        </nav>
+      </section>
     </div>
   </MainLayout>
 </template>
@@ -323,10 +311,9 @@ interface NewsArticle {
   image?: string;
   dateTimePub: string;
   source: { title: string };
-  dataType: string;
+  dataType: "news" | "pr";
 }
 
-// State
 const articles = ref<NewsArticle[]>([]);
 const isLoading = ref(false);
 const error = ref<string | null>(null);
@@ -336,11 +323,9 @@ const currentPage = ref(1);
 const itemsPerPage = 10;
 const totalResults = ref(0);
 
-// Constants
 const API_KEY = "4a6a7831-db13-4869-85b6-f1ae7eddee4d";
 const API_URL = "https://newsapi.ai/api/v1/article/getArticles";
 
-// Computed
 const filterOptions = computed(() => [
   { value: "all", label: "All", count: articles.value.length },
   {
@@ -358,84 +343,55 @@ const filterOptions = computed(() => [
 const filteredArticles = computed(() => {
   let filtered = articles.value;
 
-  // Filter by search query
   if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
     filtered = filtered.filter(
-      (article) =>
-        article.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        article.body.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        article.source.title
-          .toLowerCase()
-          .includes(searchQuery.value.toLowerCase())
+      (a) =>
+        a.title.toLowerCase().includes(q) ||
+        a.body.toLowerCase().includes(q) ||
+        a.source.title.toLowerCase().includes(q)
     );
   }
 
-  // Filter by data type
   if (selectedDataType.value !== "all") {
-    filtered = filtered.filter(
-      (article) => article.dataType === selectedDataType.value
-    );
+    filtered = filtered.filter((a) => a.dataType === selectedDataType.value);
   }
 
   totalResults.value = filtered.length;
 
-  // Pagination - split data by page
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  return filtered.slice(startIndex, endIndex);
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filtered.slice(start, start + itemsPerPage);
 });
 
 const totalPages = computed(() => Math.ceil(totalResults.value / itemsPerPage));
 
 const visiblePages = computed(() => {
-  const pages = [];
   const start = Math.max(1, currentPage.value - 2);
   const end = Math.min(totalPages.value, currentPage.value + 2);
-
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
-  return pages;
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 });
 
-// Methods
-function getMobileLabel(value: "all" | "news" | "pr") {
-  const mobileLabels = {
-    all: "All",
-    news: "News",
-    pr: "PR",
-  };
-  return mobileLabels[value];
-}
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diff = now.getTime() - date.getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  if (days === 0) {
-    return "Today";
-  } else if (days === 1) {
-    return "Yesterday";
-  } else if (days < 7) {
-    return `${days} days ago`;
-  } else {
-    return date.toLocaleString("en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  }
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr);
+  const diffDays = Math.floor(
+    (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  return date.toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 }
 
 function buttonClass(type: "all" | "news" | "pr") {
   return selectedDataType.value === type
-    ? "bg-yellow-400 border-yellow-400 text-gray-900 "
+    ? "bg-yellow-400 border-yellow-400 text-gray-900"
     : "bg-gray-700/50 border-gray-600 text-gray-300 hover:bg-gray-600/50 hover:border-gray-500";
 }
 
-function getDataTypeBadgeClass(dataType: string) {
+function getDataTypeBadgeClass(dataType: "news" | "pr") {
   return dataType === "news"
     ? "bg-green-500/20 text-green-400 border border-green-500/30"
     : "bg-purple-500/20 text-purple-400 border border-purple-500/30";
@@ -449,7 +405,6 @@ function setDataType(type: "all" | "news" | "pr") {
 function goToPage(page: number) {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
-    // Smooth scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
@@ -464,9 +419,8 @@ function onSearchChange() {
   currentPage.value = 1;
 }
 
-function handleImageError(event: Event) {
-  const img = event.target as HTMLImageElement;
-  img.style.display = "none";
+function handleImageError(e: Event) {
+  (e.target as HTMLImageElement).style.display = "none";
 }
 
 async function fetchNews() {
@@ -497,17 +451,12 @@ async function fetchNews() {
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      throw new Error(`Connection error (${res.status})`);
-    }
+    if (!res.ok) throw new Error(`Connection error (${res.status})`);
 
     const data = await res.json();
 
-    if (data?.articles?.results) {
-      articles.value = data.articles.results;
-    } else {
-      throw new Error("Unable to fetch news data");
-    }
+    if (data?.articles?.results) articles.value = data.articles.results;
+    else throw new Error("Unable to fetch news data");
   } catch (err: any) {
     error.value = err.message || "Error loading news";
   } finally {
@@ -515,15 +464,8 @@ async function fetchNews() {
   }
 }
 
-// Watchers
-watch([searchQuery, selectedDataType], () => {
-  currentPage.value = 1;
-});
-
-// Lifecycle
-onMounted(() => {
-  fetchNews();
-});
+watch([searchQuery, selectedDataType], () => (currentPage.value = 1));
+onMounted(fetchNews);
 </script>
 
 <style scoped>
@@ -541,7 +483,6 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* Smooth animations */
 article {
   opacity: 0;
   transform: translateY(20px);
@@ -555,7 +496,7 @@ article {
   }
 }
 
-/* Custom scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
