@@ -4,16 +4,16 @@
       class="h-full overflow-y-auto rounded-[40px] p-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
     >
       <!-- Header Section -->
-      <div class="mb-8">
+      <div class="mb-4">
         <h1 class="text-4xl font-bold mb-2 text-yellow-400">Latest News</h1>
         <p class="text-gray-400">
           Stay updated with interesting news and announcements
         </p>
       </div>
       <!-- Search and Filter Section -->
-      <div class="mb-8">
+      <div class="mb-4">
         <div
-          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
         >
           <!-- Search Input -->
           <div class="relative flex-1 max-w-md">
