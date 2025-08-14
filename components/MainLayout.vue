@@ -87,8 +87,8 @@
     <div class="flex-1 flex flex-col min-w-0 relative">
       <!-- เงาด้านบนสุด (มือถือ: ขอบบนล่าง, เดสก์ท็อป: ขอบซ้าย) -->
       <div
-        class="absolute top-[56px] bottom-[64px] left-0 right-0 z-[999] pointer-events-none rounded-[40px] mx-0 my-0 md:top-0 md:bottom-0 md:ml-4 md:mr-0"
-        style="box-shadow: 0 0 74px #ff6a00; border: 2px solid #ffb700"
+        class="absolute top-[56px] bottom-[64px] left-0 right-0 z-[999] pointer-events-none rounded-[40px] mx-0 my-0 md:top-0 md:bottom-0 md:mr-0"
+        style="box-shadow: 0 0 74px #ff6a00"
       ></div>
 
       <!-- แถบบนมือถือ -->
@@ -107,12 +107,11 @@
       <!-- เนื้อหาหลัก -->
       <main class="relative z-10 overflow-hidden flex-1 md:flex-1">
         <div
-          class="overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen h-[calc(100vh-120px)] p-2 box-border"
+          class="overflow-y-auto rounded-[40px] md:h-full md:max-h-full md:max-h-screen h-[calc(100vh-120px)] p-2 box-border border-t-4 border-b-4 border-yellow-400 md:border-t-0 md:border-b-0 md:border-l-4"
         >
           <slot />
         </div>
       </main>
-
       <!-- เมนูล่างมือถือ -->
       <nav
         class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around bg-black p-2 rounded-t-3xl h-[64px]"

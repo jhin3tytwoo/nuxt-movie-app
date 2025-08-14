@@ -72,7 +72,7 @@ const error = ref<string | null>(null);
 const searchQuery = ref("");
 const selectedDataType = ref<"all" | "news" | "pr">("all");
 const currentPage = ref(1);
-const itemsPerPage = 10;
+const itemsPerPage = 12;
 const totalResults = ref(0);
 const selectedTitle = ref("");
 const API_KEY = "4a6a7831-db13-4869-85b6-f1ae7eddee4d";
@@ -165,7 +165,7 @@ async function fetchNews() {
       keyword: searchQuery.value || "Tesla Inc",
       ignoreSourceGroupUri: "paywall/paywalled_sources",
       articlesPage: 1,
-      articlesCount: 20,
+      articlesCount: 24,
       articlesSortBy: "date",
       articlesSortByAsc: false,
       dataType:

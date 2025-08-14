@@ -24,7 +24,6 @@ const toggleMovie = (id) => {
   openedNotificationId.value = openedNotificationId.value === id ? null : id;
 };
 
-// Use computed property to find movie to avoid redundant calls
 const getMovieById = (id) =>
   computed(() => movies.value.find((m) => m.id === id));
 </script>
