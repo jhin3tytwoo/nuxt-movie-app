@@ -5,15 +5,19 @@
     <div class="login_card">
       <div class="login_inner_card">
         <div class="flex justify-center pb-6">
-          <h2
-            class="text-4xl font-extrabold text-center"
-            style="color: white; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5)"
-          >
-            <span class="text-white">TEST</span
-            ><span class="text-yellow-400">HUB</span>
-          </h2>
+          <NuxtLink to="/">
+            <h2
+              class="text-4xl font-extrabold text-center"
+              style="
+                color: white;
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+              "
+            >
+              <span class="text-white">TEST</span
+              ><span class="text-yellow-400">HUB</span>
+            </h2>
+          </NuxtLink>
         </div>
-
         <form @submit.prevent="handleLogin">
           <!-- username -->
           <div class="relative mb-2">

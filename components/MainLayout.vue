@@ -5,10 +5,12 @@
     <!-- เมนูด้านซ้าย (Desktop) -->
     <aside class="hidden md:flex flex-col p-4 relative">
       <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-extrabold">
-          <span class="text-white">TEST</span>
-          <span class="text-yellow-400">HUB</span>
-        </h1>
+        <NuxtLink to="/">
+          <h1 class="text-2xl font-extrabold">
+            <span class="text-white">TEST</span>
+            <span class="text-yellow-400">HUB</span>
+          </h1>
+        </NuxtLink>
         <NuxtLink to="/NotificationPage" class="text-white">
           <span class="material-icons">notifications</span>
         </NuxtLink>

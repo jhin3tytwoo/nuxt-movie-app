@@ -26,17 +26,39 @@
       />
     </div>
 
-    <!-- Title Dropdown Filter -->
-    <div class="w-full max-w-xs">
-      <select
-        class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition duration-200"
-        @change="$emit('set-title', $event.target.value)"
+    <!-- Custom Title Dropdown Filter -->
+    <div class="w-full max-w-xs relative">
+      <button
+        @click="open = !open"
+        class="w-full px-4 py-3 rounded-xl bg-gray-700/50 border border-gray-600 text-white flex justify-between items-center focus:outline-none"
       >
-        <option value="">All Sources</option>
-        <option v-for="t in uniqueTitles" :key="t" :value="t">
-          {{ t }}
-        </option>
-      </select>
+        {{ selectedTitle || "All Sources" }}
+        <span class="material-icons transform" :class="{ 'rotate-180': open }"
+          >expand_more</span
+        >
+      </button>
+
+      <transition name="fade">
+        <ul
+          v-if="open"
+          class="absolute z-50 w-full mt-1 bg-gray-800 rounded-xl shadow-lg max-h-60 overflow-auto"
+        >
+          <li
+            @click="selectTitle('')"
+            class="px-4 py-2 hover:bg-yellow-400 hover:text-gray-900 cursor-pointer"
+          >
+            All Sources
+          </li>
+          <li
+            v-for="t in uniqueTitles"
+            :key="t"
+            @click="selectTitle(t)"
+            class="px-4 py-2 hover:bg-yellow-400 hover:text-gray-900 cursor-pointer"
+          >
+            {{ t }}
+          </li>
+        </ul>
+      </transition>
     </div>
 
     <!-- DataType Filter -->
@@ -56,8 +78,10 @@
     </div>
   </section>
 </template>
+
 <script setup lang="ts" name="NewsSearchFilter">
-import { computed, defineProps } from "vue";
+import { ref, computed, defineProps, defineEmits } from "vue";
+
 interface NewsArticle {
   uri: string;
   title: string;
@@ -68,16 +92,26 @@ interface NewsArticle {
   source: { title: string };
   dataType: "news" | "pr";
 }
+
 interface FilterOption {
   value: "all" | "news" | "pr";
   label: string;
   count?: number;
 }
+
 const props = defineProps<{
   searchQuery: string;
   selectedDataType: "all" | "news" | "pr";
   articles: NewsArticle[];
 }>();
+
+const emit = defineEmits<{
+  (e: "update:searchQuery", value: string): void;
+  (e: "set-title", value: string): void;
+  (e: "set-data-type", value: "all" | "news" | "pr"): void;
+}>();
+
+// Filter Options
 const filterOptions = computed<FilterOption[]>(() => [
   { value: "all", label: "All", count: props.articles.length },
   {
@@ -91,13 +125,38 @@ const filterOptions = computed<FilterOption[]>(() => [
     count: props.articles.filter((a) => a.dataType === "pr").length,
   },
 ]);
+
+// Unique Titles
 const uniqueTitles = computed(() => {
   const titles = props.articles.map((a) => a.source?.title).filter(Boolean);
   return [...new Set(titles)];
 });
+
+// Custom dropdown state
+const open = ref(false);
+const selectedTitle = ref<string | null>(null);
+
+function selectTitle(title: string) {
+  selectedTitle.value = title || null;
+  open.value = false;
+  emit("set-title", title);
+}
+
+// Button class for dataType filter
 function buttonClass(type: "all" | "news" | "pr") {
   return props.selectedDataType === type
     ? "bg-yellow-400 border-yellow-400 text-gray-900"
     : "bg-gray-700/50 border border-gray-600 text-gray-300 hover:bg-gray-600/50 hover:border-gray-500";
 }
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
