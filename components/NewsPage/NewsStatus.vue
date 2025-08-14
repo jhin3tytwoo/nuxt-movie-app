@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const { isLoading, error, isEmpty } = defineProps<{
   isLoading: boolean;
   error: string | null;
   isEmpty: boolean;

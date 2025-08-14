@@ -98,8 +98,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
-
 interface NewsArticle {
   uri: string;
   title: string;
@@ -111,7 +109,7 @@ interface NewsArticle {
   dataType: "news" | "pr";
 }
 
-const props = defineProps<{
+defineProps<{
   articles: NewsArticle[];
   formatDate: (dateStr: string) => string;
   getDataTypeBadgeClass: (type: "news" | "pr") => string;

@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const { searchQuery, totalResults, currentPage, totalPages } = defineProps<{
   searchQuery: string;
   totalResults: number;
   currentPage: number;

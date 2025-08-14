@@ -56,22 +56,28 @@
     </div>
   </section>
 </template>
-
 <script setup lang="ts" name="NewsSearchFilter">
 import { computed, defineProps } from "vue";
-
+interface NewsArticle {
+  uri: string;
+  title: string;
+  body: string;
+  url: string;
+  image?: string;
+  dateTimePub: string;
+  source: { title: string };
+  dataType: "news" | "pr";
+}
 interface FilterOption {
   value: "all" | "news" | "pr";
   label: string;
   count?: number;
 }
-
 const props = defineProps<{
   searchQuery: string;
   selectedDataType: "all" | "news" | "pr";
-  articles: any[];
+  articles: NewsArticle[];
 }>();
-
 const filterOptions = computed<FilterOption[]>(() => [
   { value: "all", label: "All", count: props.articles.length },
   {
@@ -85,13 +91,10 @@ const filterOptions = computed<FilterOption[]>(() => [
     count: props.articles.filter((a) => a.dataType === "pr").length,
   },
 ]);
-
-// List title ไม่ซ้ำ
 const uniqueTitles = computed(() => {
   const titles = props.articles.map((a) => a.source?.title).filter(Boolean);
   return [...new Set(titles)];
 });
-
 function buttonClass(type: "all" | "news" | "pr") {
   return props.selectedDataType === type
     ? "bg-yellow-400 border-yellow-400 text-gray-900"
